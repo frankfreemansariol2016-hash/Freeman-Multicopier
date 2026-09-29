@@ -25,12 +25,20 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# El SDK se instalo a mano en el perfil del usuario: no esta en el PATH del sistema.
-$DotnetRoot = "$env:LOCALAPPDATA\Programs\dotnet"
-$Dotnet     = Join-Path $DotnetRoot 'dotnet.exe'
+# El SDK se busca primero en el PATH, para que este script tambien funcione en un
+# agente de compilacion, donde el SDK no esta en el perfil del usuario. Si no esta en
+# el PATH, se mira donde se instalo a mano en este equipo.
+$Dotnet = (Get-Command dotnet.exe -ErrorAction SilentlyContinue | Select-Object -First 1).Source
 
-if (-not (Test-Path $Dotnet)) {
-    throw "No se encuentra dotnet.exe en $DotnetRoot. Instala el SDK .NET 10 o ajusta `$DotnetRoot en este script."
+if ($Dotnet) {
+    $DotnetRoot = Split-Path $Dotnet -Parent
+} else {
+    $DotnetRoot = "$env:LOCALAPPDATA\Programs\dotnet"
+    $Dotnet     = Join-Path $DotnetRoot 'dotnet.exe'
+
+    if (-not (Test-Path $Dotnet)) {
+        throw "No se encuentra dotnet.exe ni en el PATH ni en $DotnetRoot. Instala el SDK .NET 10 o ajusta las dos rutas de este script."
+    }
 }
 
 $env:DOTNET_ROOT           = $DotnetRoot

@@ -11,6 +11,12 @@ tocar ningun boton.
 - Bloque ORIGEN: lectura y transferencia, con la tasa de cada archivo.
 - El modo de copia se vuelve a Normal solo despues de cada arrastre.
 
+![La ventana de Freeman MULTICOPIER](docs/ventana.png)
+
+Es un dibujo, no una captura, para no enseñar los nombres de volumen de
+nadie. Se genera con `docs\ventana.py`, con la misma paleta y la misma
+disposicion que la ventana real.
+
 No hay licencias, ni limites de dispositivos, ni cuentas. Todo el codigo es
 original: el motor de copia esta escrito desde cero y no usa librerias de
 terceros para copiar.
@@ -70,7 +76,22 @@ Solo escribe `prueba.txt` si tiene consola delante.
 | `branding` | el icono: `icono.svg` es la fuente de verdad |
 | `installer` | el `.iss` de Inno Setup |
 | `docs\manual.py` | el generador del manual en PDF |
+| `docs\ventana.py` | el generador del dibujo de arriba |
 | `build.ps1` | compilar, probar y empaquetar |
 
 `ESTADO.md` cuenta con detalle como se llegó hasta aquí: los problemas que
 aparecieron, lo que se midió, y las decisiones que se tomaron y por qué.
+
+## Licencia
+
+**No hay licencia, y esa es la decisión.** Un repositorio público sin
+`LICENSE` es, por definición, de todos los derechos reservados: se puede leer
+y descargar, pero nadie puede reutilizar el código sin permiso.
+
+El código se publica para que se pueda leer y auditar. Si en algún momento se
+quiere abrir, añadir un `LICENSE` MIT es un fichero y un commit:
+
+```powershell
+# decidir primero, luego:
+Copy-Item .\LICENSE-MIT .\LICENSE
+```

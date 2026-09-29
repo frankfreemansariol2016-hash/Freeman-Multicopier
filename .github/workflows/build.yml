@@ -1,0 +1,51 @@
+name: compilar
+
+# Compila en cada push a main, en cada pull request, y a mano desde la pestaña
+# Actions. El objetivo es que quede demostrado que el codigo sigue compilando y
+# que las 82 pruebas siguen pasando, sin depender del equipo de nadie.
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+# Cancelar el push anterior si llega otro mientras este todavia corre.
+concurrency:
+  group: compilar-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows, .NET 10, instalador
+    runs-on: windows-latest
+
+    steps:
+      - name: Traer el codigo
+        uses: actions/checkout@v4
+
+      - name: Poner el SDK de .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Poner Inno Setup 6
+        # build.ps1 busca ISCC.exe en Program Files (x86), que es donde lo deja
+        # chocolatey, asi que esta linea y la lista de busqueda del script van juntas.
+        run: choco install innosetup --yes --no-progress
+        shell: pwsh
+
+      - name: Compilar, probar y empaquetar
+        # build.ps1 ya hace las cuatro cosas y para si las pruebas fallan, asi que
+        # aqui no hay que repetir ningun paso.
+        run: .\build.ps1
+        shell: pwsh
+
+      - name: Subir lo generado
+        uses: actions/upload-artifact@v4
+        with:
+          name: Freeman-MULTICOPIER
+          path: build/out/
+          if-no-files-found: error
