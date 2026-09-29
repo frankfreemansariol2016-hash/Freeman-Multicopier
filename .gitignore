@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------------------
+#  Freeman MULTICOPIER - que no se publique lo que no toca.
+#
+#  El arbol de trabajo tiene unos 310 MB, de los que 45 ficheros son el
+#  proyecto de verdad y pesan menos de medio megabyte. Todo lo demas es
+#  producto de compilacion, y por eso esta lista es tan larga.
+# ---------------------------------------------------------------------------
+
+# ------------------------------------------- producto de compilacion del proyecto
+# build\out    el instalador (54 MB), el .rar (53 MB) y el PDF del manual
+# build\stage  lo que se le pasa a Inno Setup
+# bin\         el ejecutable de un solo archivo y todos los intermedios
+# obj\         los .json de NuGet y los .csproj temporales de cada compilacion
+build/
+bin/
+obj/
+
+# .NET deja en obj\ los .nuget.g.props y demas, que llevan rutas absolutas
+# de esta maquina y no sirven en ninguna otra
+*.nuget.g.props
+*.nuget.g.targets
+*.nuget.dgspec.json
+project.assets.json
+project.nuget.cache
+*_wpftmp.csproj
+
+# -------------------------------------------------------------------- reports
+# El informe de --selftest va a %LOCALAPPDATA%, pero si alguien lo copia aqui
+# no tiene que acabar en el repositorio
+prueba.txt
+*.log
+registro.log
+
+# ---------------------------------------------- restos de herramientas y del IDE
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+desktop.ini
+$RECYCLE.BIN/
+
+# Editores
+*.swp
+*.swo
+*~
+.vscode/
+
+# Python, por el generador del manual (docs\manual.py)
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+
+# ---------------------------------------------------------------------------
+#  Lo que SI entra, y es a proposito:
+#
+#    src\FreemanMultiCopier\Resources\app.ico  lo genera build.ps1 en el paso 0
+#                                             a partir de branding\icono.svg, pero se
+#                                             versiona (37 KB) para que abrir el
+#                                             proyecto en un IDE sin pasar antes
+#                                             por build.ps1 no falle.
+#    branding\png\app-*.png                    son las entradas del generador del
+#                                             icono, no producto suyo.
+# ---------------------------------------------------------------------------
